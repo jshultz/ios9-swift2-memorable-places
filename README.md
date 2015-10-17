@@ -2,3 +2,8 @@
 
 Map App that lets you find places on a map and add them to a list. 
 You can then select places in the list and it will show them to you on the map.
+
+Features include
+* CoreData
+* Reverse Geolocation
+* Maps
