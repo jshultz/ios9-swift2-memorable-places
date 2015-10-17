@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 var places = [Dictionary<String,String>()]
 
 var activePlace = -1
+
+let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+let context: NSManagedObjectContext = appDel.managedObjectContext
+
+let request = NSFetchRequest(entityName: "Places")
+
 
 class TableViewController: UITableViewController {
     
@@ -20,12 +27,24 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        table.reloadData()
-
-        if places.count == 1 {
-            places.removeAtIndex(0)
-            places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
-        }
+//        request.returnsObjectsAsFaults = false
+//        
+//        do {
+//            let results = try context.executeFetchRequest(request)
+//            
+//            if (results.count > 0) {
+//                
+//                for result in results as! [NSManagedObject] {
+//                    let title:String = String(result.valueForKey("title")!)
+//                    let lat:String = String(result.valueForKey("lat")!)
+//                    let lon:String = String(result.valueForKey("lon")!)
+//                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)"])
+//                }
+//            }
+//        } catch {
+//            print("something went wrong")
+//        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,6 +79,33 @@ class TableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        places.removeAll()
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try context.executeFetchRequest(request)
+            
+            if (results.count > 0) {
+                
+                for result in results as! [NSManagedObject] {
+                    let title:String = String(result.valueForKey("title")!)
+                    let lat:String = String(result.valueForKey("lat")!)
+                    let lon:String = String(result.valueForKey("lon")!)
+                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)"])
+                }
+            }
+        } catch {
+            print("something went wrong")
+        }
+        
+        if places.count == 1 {
+            places.removeAtIndex(0)
+            places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
+        }
+        
+        
         tableView.reloadData()
     }
 
@@ -71,17 +117,18 @@ class TableViewController: UITableViewController {
     }
     */
 
-    /*
+
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
+            places.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+
 
     /*
     // Override to support rearranging the table view.

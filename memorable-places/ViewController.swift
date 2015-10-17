@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 import CoreLocation
 import MapKit
 
@@ -21,7 +22,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         locationManager.delegate = self
@@ -95,8 +95,20 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             
-            print("Gesture Recognized")
+            // Setup Connection
             
+            let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            
+            let context: NSManagedObjectContext = appDel.managedObjectContext
+            
+            let request = NSFetchRequest(entityName: "Places")
+            
+            request.returnsObjectsAsFaults = false
+            
+            // Bleh
+            
+            print("Gesture Recognized")
+
             var title = ""
             
             let touchPoint = gestureRecognizer.locationInView(self.map)
@@ -140,6 +152,29 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 places.append(["name":title,"lat":"\(newCoordinate.latitude)","lon":"\(newCoordinate.longitude)"])
                 
                 print("places: ", places)
+                
+                do {
+                    let results = try context.executeFetchRequest(request) // did we get something?
+                    
+                    let count:Int = results.count == 0 ? results.count : results.count + 1
+                    
+                    var newPlace = NSEntityDescription.insertNewObjectForEntityForName("Places", inManagedObjectContext: context)
+                    
+                    newPlace.setValue(Int(count), forKey: "id")
+                    newPlace.setValue(String(title), forKey: "title")
+                    newPlace.setValue(String(newCoordinate.latitude), forKey: "lat")
+                    newPlace.setValue(String(newCoordinate.longitude), forKey: "lon")
+                    
+                    do {
+                        try context.save()
+                    } catch {
+                        print("something went wrong")
+                    }
+
+                } catch {
+                    print("something went wrong")
+                }
+                
             })
             
         }
