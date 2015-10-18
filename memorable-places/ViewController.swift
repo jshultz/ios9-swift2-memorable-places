@@ -166,7 +166,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                     
                     let count:Int = results.count == 0 ? results.count : results.count + 1
                     
-                    var newPlace = NSEntityDescription.insertNewObjectForEntityForName("Places", inManagedObjectContext: context)
+                    let newPlace = NSEntityDescription.insertNewObjectForEntityForName("Places", inManagedObjectContext: context)
                     
                     newPlace.setValue(Int(count), forKey: "id")
                     newPlace.setValue(String(title), forKey: "title")
@@ -191,7 +191,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("i am here")
         if segue.identifier == "newPlace" {
+            print("in this spot")
             activePlace = -1
         }
     }

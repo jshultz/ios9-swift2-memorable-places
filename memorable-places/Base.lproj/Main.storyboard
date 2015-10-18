@@ -25,7 +25,7 @@
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <segue destination="Gld-0O-k6e" kind="show" id="SWk-AF-4an"/>
+                                    <segue destination="dRN-Ht-ESg" kind="show" identifier="showLocation" id="wr4-Ub-v13"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -51,10 +51,29 @@
             </objects>
             <point key="canvasLocation" x="-131" y="352"/>
         </scene>
-        <!--View Controller-->
+        <!--Location View-->
+        <scene sceneID="bUT-j7-byk">
+            <objects>
+                <viewController title="Location View" id="dRN-Ht-ESg" customClass="LocationViewController" customModule="memorable_places" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vXp-vv-wgJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="0ch-GZ-979"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nvb-AA-kVD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="knv-ys-eRz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="620" y="99"/>
+        </scene>
+        <!--Map View-->
         <scene sceneID="eQN-Ur-XZ3">
             <objects>
-                <viewController id="Gld-0O-k6e" customClass="ViewController" customModule="memorable_places" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Map View" id="Gld-0O-k6e" customClass="ViewController" customModule="memorable_places" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="noC-BZ-7A4"/>
                         <viewControllerLayoutGuide type="bottom" id="WIP-yX-KMh"/>
@@ -106,7 +125,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Cj-Us-Tdd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="514" y="351"/>
+            <point key="canvasLocation" x="612" y="779"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="a0W-1h-JdV">
@@ -126,7 +145,4 @@
             <point key="canvasLocation" x="-952" y="351"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="jw7-wM-RpL"/>
-    </inferredMetricsTieBreakers>
 </document>

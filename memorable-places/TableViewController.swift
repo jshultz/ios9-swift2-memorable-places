@@ -27,24 +27,6 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        request.returnsObjectsAsFaults = false
-//        
-//        do {
-//            let results = try context.executeFetchRequest(request)
-//            
-//            if (results.count > 0) {
-//                
-//                for result in results as! [NSManagedObject] {
-//                    let title:String = String(result.valueForKey("title")!)
-//                    let lat:String = String(result.valueForKey("lat")!)
-//                    let lon:String = String(result.valueForKey("lon")!)
-//                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)"])
-//                }
-//            }
-//        } catch {
-//            print("something went wrong")
-//        }
-        
     }
 
     override func didReceiveMemoryWarning() {
