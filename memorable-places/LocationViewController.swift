@@ -9,11 +9,16 @@
 import UIKit
 
 class LocationViewController: UIViewController {
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        titleLabel.text = places[activePlace]["name"]
     }
 
     override func didReceiveMemoryWarning() {

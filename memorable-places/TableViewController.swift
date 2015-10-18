@@ -147,14 +147,17 @@ class TableViewController: UITableViewController {
     }
     */
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    // MARK: - Navigation
+    // This is fired on the view originating the segue, not the view receiving the segue.
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        print("i am here")
+        if segue.identifier == "newPlace" {
+            print("in this spot")
+            activePlace = -1
+        }
     }
-    */
+
 
 }
