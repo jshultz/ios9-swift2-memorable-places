@@ -103,6 +103,7 @@ class TableViewController: UITableViewController {
         if places.count == 1 {
             places.removeAtIndex(0)
             places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
+            
         }
         
         
@@ -121,6 +122,25 @@ class TableViewController: UITableViewController {
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            
+            do {
+                let results = try context.executeFetchRequest(request)
+                
+                let placeToDelete = results[indexPath.row]
+                
+                // Delete it from the managedObjectContext
+                context.deleteObject(placeToDelete as! NSManagedObject)
+                
+                do {
+                    try context.save()
+                } catch {
+                    print("something went wrong?")
+                }
+                
+            
+            } catch {
+                print("something went wrong")
+            }
             // Delete the row from the data source
             places.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)

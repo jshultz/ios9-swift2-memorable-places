@@ -123,6 +123,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                         var subThoroughfare = ""
                         var thoroughfare = ""
                         
+                        print("name: ", p.name)
+                        print("p.subThoroughfare: ", p.subThoroughfare)
+                        print("p.thoroughfare", p.thoroughfare)
+                        
                         if p.subThoroughfare != nil {
                             subThoroughfare = p.subThoroughfare!
                         }
@@ -131,7 +135,13 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                             thoroughfare = p.thoroughfare!
                         }
                         
-                        title = "\(subThoroughfare) \(thoroughfare)"
+                        if (p.name != "") {
+                            title = String(p.name!)
+                        } else {
+                            title = "\(subThoroughfare) \(thoroughfare)"
+                        }
+                        
+                        
                     }
                 }
                 
@@ -150,8 +160,6 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 self.map.addAnnotation(annotation)
                 
                 places.append(["name":title,"lat":"\(newCoordinate.latitude)","lon":"\(newCoordinate.longitude)"])
-                
-                print("places: ", places)
                 
                 do {
                     let results = try context.executeFetchRequest(request) // did we get something?
