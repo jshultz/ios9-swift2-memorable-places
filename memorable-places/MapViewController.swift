@@ -110,6 +110,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             print("Gesture Recognized")
 
             var title = ""
+            var subThoroughfare:String = ""
+            var thoroughfare:String = ""
+            var street:String = ""
+            var locality:String = ""
+            var region:String = ""
+            var country:String = ""
+            var administrativeArea:String = ""
             
             let touchPoint = gestureRecognizer.locationInView(self.map)
             
@@ -120,26 +127,56 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
                 if (error == nil) {
                     if let p = placemarks?[0] {
-                        var subThoroughfare = ""
-                        var thoroughfare = ""
+                        
                         
                         print("name: ", p.name)
                         print("p.subThoroughfare: ", p.subThoroughfare)
                         print("p.thoroughfare", p.thoroughfare)
                         
                         if p.subThoroughfare != nil {
-                            subThoroughfare = p.subThoroughfare!
+                            subThoroughfare = String(p.subThoroughfare!)
+                        } else {
+                            subThoroughfare = ""
                         }
                         
                         if p.thoroughfare != nil {
-                            thoroughfare = p.thoroughfare!
+                            thoroughfare = String(p.thoroughfare!)
+                        } else {
+                            thoroughfare = ""
+                        }
+                        
+                        if p.locality != nil {
+                            locality = String(p.locality!)
+                        } else {
+                            locality = ""
+                        }
+                        
+                        if p.region != nil {
+                            region = String(p.region!)
+                        } else {
+                            region = ""
+                        }
+                        
+                        if p.country != nil {
+                            country = String(p.country!)
+                        } else {
+                            country = ""
+                        }
+                        
+                        if p.administrativeArea != nil {
+                            administrativeArea = String(p.administrativeArea!)
+                        } else {
+                            administrativeArea = ""
                         }
                         
                         if (p.name != "") {
                             title = String(p.name!)
                         } else {
                             title = "\(subThoroughfare) \(thoroughfare)"
+                            
                         }
+                        
+                        street = "\(subThoroughfare) \(thoroughfare)"
                         
                         
                     }
@@ -170,8 +207,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     
                     newPlace.setValue(Int(count), forKey: "id")
                     newPlace.setValue(String(title), forKey: "title")
+                    newPlace.setValue(String(street), forKey: "street")
+                    newPlace.setValue(String(locality), forKey: "locality")
+                    newPlace.setValue(String(region), forKey: "region")
+                    newPlace.setValue(String(country), forKey: "country")
                     newPlace.setValue(String(newCoordinate.latitude), forKey: "lat")
                     newPlace.setValue(String(newCoordinate.longitude), forKey: "lon")
+                    newPlace.setValue(String(administrativeArea), forKey: "administrativeArea")
                     
                     do {
                         try context.save()
