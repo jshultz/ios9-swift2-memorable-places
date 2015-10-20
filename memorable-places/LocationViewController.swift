@@ -21,8 +21,6 @@ class LocationViewController: UIViewController {
     
     @IBOutlet weak var stateLabel: UILabel!
     
-    @IBOutlet weak var country: UILabel!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,22 +38,27 @@ class LocationViewController: UIViewController {
             if (results.count > 0) {
                 
                 for result in results as! [NSManagedObject] {
-                    if let title:String = result.valueForKey("title") as? String { // cast username as String so we can use it.
+                    if let title:String = result.valueForKey("title") as? String {
                         titleLabel.text = String(UTF8String: title)!
                     } else {
                         titleLabel.text = ""
                     }
-                    if let street = result.valueForKey("street") as? String { // cast username as String so we can use it.
+                    if let street = result.valueForKey("street") as? String {
                         streetLabel.text = String(street)
                     } else {
                         streetLabel.text = ""
                     }
-                    if let locality = result.valueForKey("locality") as? String { // cast username as String so we can use it.
+                    if let locality = result.valueForKey("locality") as? String {
                         cityLabel.text = String(locality)
                     } else {
                         cityLabel.text = ""
                     }
-                    if let administrativeArea = result.valueForKey("administrativeArea") as? String { // cast username as String so we can use it.
+                    if let description = result.valueForKey("user_description") as? String {
+                        descriptionLabel.text = String(description)
+                    } else {
+                        descriptionLabel.text = ""
+                    }
+                    if let administrativeArea = result.valueForKey("administrativeArea") as? String {
                         stateLabel.text = String(administrativeArea)
                     } else {
                         stateLabel.text = ""
