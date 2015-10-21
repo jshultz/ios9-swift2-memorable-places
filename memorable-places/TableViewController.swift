@@ -151,7 +151,6 @@ class TableViewController: UITableViewController {
     // This is fired on the view originating the segue, not the view receiving the segue.
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print("i am here")
         if segue.identifier == "newPlace" {
             print("in this spot")
             activePlace = -1
