@@ -63,68 +63,71 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func submitChanges(sender: AnyObject) {
         
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedObjectContext = appDelegate.managedObjectContext
-        let entity = NSEntityDescription.entityForName("Places", inManagedObjectContext: managedObjectContext)
-        let paper = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedObjectContext)
+        // begin new code
         
-        let title = titleField?.text
-        let user_description = descriptionField?.text
-        
-        
-        
-        paper.setValue(title, forKey: "title")
-        paper.setValue(user_description, forKey: "user_description")
-        
-        //-- put food on tray --//
-        
-//        allPapers.append(paper)
-        
-        //-- put the tray inside refrigerator --//
-        
-        do {
-            try managedObjectContext.save()
-            print("success")
-            
-        } catch {
-            print("Unresolved error")
-            abort()
-        }
+//        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//        let managedObjectContext = appDelegate.managedObjectContext
+//        let entity = NSEntityDescription.entityForName("Places", inManagedObjectContext: managedObjectContext)
+//        let paper = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedObjectContext)
+//        
+//        let title = titleField?.text
+//        let user_description = descriptionField?.text
+//        
+//        
+//        
+//        paper.setValue(title, forKey: "title")
+//        paper.setValue(user_description, forKey: "user_description")
+//        
+//        //-- put food on tray --//
+//        
+////        allPapers.append(paper)
+//        
+//        //-- put the tray inside refrigerator --//
+//        
+//        do {
+//            try managedObjectContext.save()
+//            print("success")
+//            
+//        } catch {
+//            print("Unresolved error")
+//            abort()
+//        }
         
         // end new code
         
-//        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//        let context: NSManagedObjectContext = appDel.managedObjectContext
-//        
-//        let request = NSFetchRequest(entityName: "Places")
-//        
-//        request.returnsObjectsAsFaults = false
+        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context: NSManagedObjectContext = appDel.managedObjectContext
         
-//        do {
-//            let results = try context.executeFetchRequest(request)
-//            
-//            if (results.count > 0) {
-//                
-//                for result in results as! [NSManagedObject] {
-//                    if let title:String = result.valueForKey("title") as? String { // cast username as String so we can use it.
-//                        result.setValue(String(titleField.text!), forKey: "title")
-//                    }
-//                    if let description = result.valueForKey("user_description") as? String { // cast username as String so we can use it.
-//                        result.setValue(String(descriptionField.text!), forKey: "user_description")
-//                    }
-//                }
-//                
-//                do {
-//                    print("here in the save")
-//                    try context.save() 
-//                } catch {
-//                    print("something went wroing")
-//                }
-//                
-//            }
-//        } catch {
-//            print("something went wrong")
-//        }
+        let request = NSFetchRequest(entityName: "Places")
+        
+        request.returnsObjectsAsFaults = false
+        
+
+        
+        
+        do {
+            let results = try context.executeFetchRequest(request)
+            
+            if (results.count > 0) {
+                let title = titleField?.text
+                let user_description = descriptionField?.text
+                
+                for result in results as! [NSManagedObject] {
+                    result.setValue(String(titleField.text!), forKey: "title")
+                    result.setValue(String(descriptionField.text!), forKey: "user_description")
+                }
+                
+                do {
+                    print("here in the save")
+                    try context.save() 
+                } catch {
+                    print("something went wroing")
+                }
+                
+            }
+        } catch {
+            print("something went wrong")
+        }
     }
     
 
