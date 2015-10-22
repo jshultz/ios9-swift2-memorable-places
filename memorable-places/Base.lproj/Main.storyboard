@@ -15,16 +15,46 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="8ht-Le-yOe">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="8ht-Le-yOe" customClass="PlacesTableViewCell" customModule="memorable_places" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8ht-Le-yOe" id="tn5-NH-pMo">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YBT-sK-wFu">
+                                            <rect key="frame" x="578" y="11" width="14" height="21"/>
+                                            <animations/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="2T8-Ud-aJh"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7gj-Bo-fH6">
+                                            <rect key="frame" x="8" y="11" width="115" height="21"/>
+                                            <animations/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="pgl-dV-hS9"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                     <animations/>
+                                    <constraints>
+                                        <constraint firstItem="YBT-sK-wFu" firstAttribute="top" secondItem="tn5-NH-pMo" secondAttribute="topMargin" constant="3" id="35m-bm-fgC"/>
+                                        <constraint firstItem="7gj-Bo-fH6" firstAttribute="top" secondItem="tn5-NH-pMo" secondAttribute="topMargin" constant="3" id="E48-ls-QjW"/>
+                                        <constraint firstItem="YBT-sK-wFu" firstAttribute="trailing" secondItem="tn5-NH-pMo" secondAttribute="trailingMargin" id="TCe-V7-PWc"/>
+                                        <constraint firstItem="7gj-Bo-fH6" firstAttribute="leading" secondItem="tn5-NH-pMo" secondAttribute="leadingMargin" id="ZzQ-DJ-CKE"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
+                                    <outlet property="locationNameLabel" destination="7gj-Bo-fH6" id="Rc0-O1-9KN"/>
+                                    <outlet property="placeIdLabel" destination="YBT-sK-wFu" id="1Yk-cy-NNf"/>
                                     <segue destination="dRN-Ht-ESg" kind="show" identifier="viewPlace" id="kae-5L-yrJ"/>
                                 </connections>
                             </tableViewCell>

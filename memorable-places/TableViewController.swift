@@ -49,9 +49,11 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-
-        cell.textLabel?.text = places[indexPath.row]["name"]
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PlacesTableViewCell
+        print("id ", places[indexPath.row])
+        cell.locationNameLabel!.text = places[indexPath.row]["name"]
+        cell.placeIdLabel!.text = places[indexPath.row]["thisID"]
+//        cell.textLabel?.text = places[indexPath.row]["name"]
 
         return cell
     }
@@ -74,11 +76,12 @@ class TableViewController: UITableViewController {
             if (results.count > 0) {
                 
                 for result in results as! [NSManagedObject] {
+                    let thisID = result.objectID
                     let id:String = String(result.valueForKey("id")!)
                     let title:String = String(result.valueForKey("title")!)
                     let lat:String = String(result.valueForKey("lat")!)
                     let lon:String = String(result.valueForKey("lon")!)
-                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)"])
+                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)","id":"\(id)","thisID":"\(thisID)"])
                 }
             }
         } catch {
