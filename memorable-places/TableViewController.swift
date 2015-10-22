@@ -19,6 +19,8 @@ let context: NSManagedObjectContext = appDel.managedObjectContext
 let request = NSFetchRequest(entityName: "Places")
 
 
+
+
 class TableViewController: UITableViewController {
     
     @IBOutlet var table: UITableView!
@@ -72,6 +74,7 @@ class TableViewController: UITableViewController {
             if (results.count > 0) {
                 
                 for result in results as! [NSManagedObject] {
+                    let id:String = String(result.valueForKey("id")!)
                     let title:String = String(result.valueForKey("title")!)
                     let lat:String = String(result.valueForKey("lat")!)
                     let lon:String = String(result.valueForKey("lon")!)
@@ -154,6 +157,8 @@ class TableViewController: UITableViewController {
         if segue.identifier == "newPlace" {
             print("in this spot")
             activePlace = -1
+        } else {
+//            activePlace = indexPath[row]
         }
     }
 

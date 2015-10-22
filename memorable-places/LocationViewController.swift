@@ -21,58 +21,55 @@ class LocationViewController: UIViewController {
     
     @IBOutlet weak var stateLabel: UILabel!
     
+    var allPapers = [NSManagedObject]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let context: NSManagedObjectContext = appDel.managedObjectContext
-        
-        let request = NSFetchRequest(entityName: "Places")
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let results = try context.executeFetchRequest(request)
-            
-            if (results.count > 0) {
-                
-                for result in results as! [NSManagedObject] {
-                    if let title:String = result.valueForKey("title") as? String {
-                        titleLabel.text = String(UTF8String: title)!
-                    } else {
-                        titleLabel.text = ""
-                    }
-                    if let street = result.valueForKey("street") as? String {
-                        streetLabel.text = String(street)
-                    } else {
-                        streetLabel.text = ""
-                    }
-                    if let locality = result.valueForKey("locality") as? String {
-                        cityLabel.text = String(locality)
-                    } else {
-                        cityLabel.text = ""
-                    }
-                    if let description = result.valueForKey("user_description") as? String {
-                        descriptionLabel.text = String(description)
-                    } else {
-                        descriptionLabel.text = ""
-                    }
-                    if let administrativeArea = result.valueForKey("administrativeArea") as? String {
-                        stateLabel.text = String(administrativeArea)
-                    } else {
-                        stateLabel.text = ""
-                    }
-                }
-                
-            }
-        } catch {
-            print("something went wrong")
-        }
 
         // Do any additional setup after loading the view.
-        
 
+    }
+    
+    //-- fetch data from CoreData --//
+    func fetchPapers () {
+        
+        //-- CoreData starts --//
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedObjectContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Places")
+        
+        var error: NSError?
+        
+        do {
+            allPapers = try managedObjectContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            
+            for paper in allPapers {
+                
+                let place_id:Int = (paper.valueForKey("id") as? Int)!
+                
+                print("activePlace ", Int(activePlace))
+                print("place_id ", place_id)
+            
+                if place_id == Int(activePlace) {
+                    titleLabel.text = paper.valueForKey("title") as? String
+                    cityLabel.text = paper.valueForKey("locality") as? String
+                    descriptionLabel.text = paper.valueForKey("user_description") as? String
+                    stateLabel.text = paper.valueForKey("administrativeArea") as? String
+                    streetLabel.text = paper.valueForKey("street") as? String
+                }
+            }
+            
+        } catch {
+            print("Not fetched\(error)")
+        }
+        
+        //-- CoreData ends --//
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        fetchPapers()
     }
 
     override func didReceiveMemoryWarning() {

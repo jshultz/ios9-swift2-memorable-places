@@ -40,8 +40,17 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
             allPapers = try managedObjectContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]
             
             for paper in allPapers {
-                titleField.text = paper.valueForKey("title") as? String
-                descriptionField.text = paper.valueForKey("user_description") as? String
+                
+                let place_id = paper.valueForKey("id") as? Int
+                
+                print("activePlace ", activePlace)
+                print("place_id ", String(place_id!))
+                
+                if String(place_id!) == String(activePlace) {
+                    titleField.text = paper.valueForKey("title") as? String
+                    descriptionField.text = paper.valueForKey("user_description") as? String
+                }
+                
                 
             }
             
@@ -63,47 +72,12 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func submitChanges(sender: AnyObject) {
         
-        // begin new code
-        
-//        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//        let managedObjectContext = appDelegate.managedObjectContext
-//        let entity = NSEntityDescription.entityForName("Places", inManagedObjectContext: managedObjectContext)
-//        let paper = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedObjectContext)
-//        
-//        let title = titleField?.text
-//        let user_description = descriptionField?.text
-//        
-//        
-//        
-//        paper.setValue(title, forKey: "title")
-//        paper.setValue(user_description, forKey: "user_description")
-//        
-//        //-- put food on tray --//
-//        
-////        allPapers.append(paper)
-//        
-//        //-- put the tray inside refrigerator --//
-//        
-//        do {
-//            try managedObjectContext.save()
-//            print("success")
-//            
-//        } catch {
-//            print("Unresolved error")
-//            abort()
-//        }
-        
-        // end new code
-        
         let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context: NSManagedObjectContext = appDel.managedObjectContext
         
         let request = NSFetchRequest(entityName: "Places")
         
         request.returnsObjectsAsFaults = false
-        
-
-        
         
         do {
             let results = try context.executeFetchRequest(request)
@@ -113,8 +87,15 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
                 let user_description = descriptionField?.text
                 
                 for result in results as! [NSManagedObject] {
-                    result.setValue(String(titleField.text!), forKey: "title")
-                    result.setValue(String(descriptionField.text!), forKey: "user_description")
+                    
+                    let place_id = result.valueForKey("id") as? Int
+                    
+                    if String(place_id!) == String(activePlace) {
+                        result.setValue(String(titleField.text!), forKey: "title")
+                        result.setValue(String(descriptionField.text!), forKey: "user_description")
+                    }
+                    
+                    
                 }
                 
                 do {
