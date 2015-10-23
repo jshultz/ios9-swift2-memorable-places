@@ -34,8 +34,7 @@ class LocationViewController: UIViewController {
     func fetchPapers () {
         
         //-- CoreData starts --//
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedObjectContext = appDelegate.managedObjectContext
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
         
         let fetchRequest = NSFetchRequest(entityName: "Places")
         

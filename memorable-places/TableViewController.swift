@@ -13,21 +13,43 @@ var places = [Dictionary<String,String>()]
 
 var activePlace = -1
 
-let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-let context: NSManagedObjectContext = appDel.managedObjectContext
+//let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//let context: NSManagedObjectContext = appDel.managedObjectContext
+//
+//let request = NSFetchRequest(entityName: "Places")
 
-let request = NSFetchRequest(entityName: "Places")
+var objectsAry = [NSManagedObject]()
 
 
-
-
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+    
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    var fetchedResultController: NSFetchedResultsController = NSFetchedResultsController()
+    
+    func getFetchedResultController() -> NSFetchedResultsController {
+        fetchedResultController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+    return fetchedResultController
+    }
+    
+    func taskFetchRequest() -> NSFetchRequest {
+        let fetchRequest = NSFetchRequest(entityName: "Places")
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return fetchRequest
+    }
     
     @IBOutlet var table: UITableView!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchedResultController = getFetchedResultController()
+        fetchedResultController.delegate = self
+        do {
+            try fetchedResultController.performFetch()
+        } catch {
+            print("something done gone wrong")
+        }
         
     }
 
@@ -40,20 +62,22 @@ class TableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        let numberOfSections = fetchedResultController.sections?.count
+        return numberOfSections!
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return places.count
+        let numberOfRowsInSection = fetchedResultController.sections?[section].numberOfObjects
+        return numberOfRowsInSection!
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PlacesTableViewCell
-        print("id ", places[indexPath.row])
-        cell.locationNameLabel!.text = places[indexPath.row]["name"]
-        cell.placeIdLabel!.text = places[indexPath.row]["thisID"]
-//        cell.textLabel?.text = places[indexPath.row]["name"]
+
+        let place = fetchedResultController.objectAtIndexPath(indexPath) as! Places
+        cell.locationNameLabel!.text = place.title
+
 
         return cell
     }
@@ -66,32 +90,32 @@ class TableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         
-        places.removeAll()
+//        objectsAry.removeAll()
+//        
+//        request.returnsObjectsAsFaults = false
+//        
+//        do {
+//            let results = try context.executeFetchRequest(request)
+//            
+//            if (results.count > 0) {
+//                
+//                for result in results as! [NSManagedObject] {
+////                    let thisID = result.objectID
+////                    let id:String = String(result.valueForKey("id")!)
+////                    let title:String = String(result.valueForKey("title")!)
+////                    let lat:String = String(result.valueForKey("lat")!)
+////                    let lon:String = String(result.valueForKey("lon")!)
+//                    objectsAry.append((result as? NSManagedObject)!)
+//                }
+//            }
+//        } catch {
+//            print("something went wrong")
+//        }
         
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let results = try context.executeFetchRequest(request)
-            
-            if (results.count > 0) {
-                
-                for result in results as! [NSManagedObject] {
-                    let thisID = result.objectID
-                    let id:String = String(result.valueForKey("id")!)
-                    let title:String = String(result.valueForKey("title")!)
-                    let lat:String = String(result.valueForKey("lat")!)
-                    let lon:String = String(result.valueForKey("lon")!)
-                    places.append(["name":"\(title)","lat":"\(lat)","lon":"\(lon)","id":"\(id)","thisID":"\(thisID)"])
-                }
-            }
-        } catch {
-            print("something went wrong")
-        }
-        
-        if places.count == 0 {
-            places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
-            
-        }
+//        if places.count == 0 {
+//            places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
+//            
+//        }
         
         
         tableView.reloadData()
@@ -111,25 +135,25 @@ class TableViewController: UITableViewController {
         if editingStyle == .Delete {
             
             do {
-                let results = try context.executeFetchRequest(request)
-                
-                let placeToDelete = results[indexPath.row]
-                
-                // Delete it from the managedObjectContext
-                context.deleteObject(placeToDelete as! NSManagedObject)
-                
-                do {
-                    try context.save()
-                } catch {
-                    print("something went wrong?")
-                }
+//                let results = try context.executeFetchRequest(request)
+//                
+//                let placeToDelete = results[indexPath.row]
+//                
+//                // Delete it from the managedObjectContext
+//                context.deleteObject(placeToDelete as! NSManagedObject)
+//                
+//                do {
+//                    try context.save()
+//                } catch {
+//                    print("something went wrong?")
+//                }
                 
             
             } catch {
                 print("something went wrong")
             }
             // Delete the row from the data source
-            places.removeAtIndex(indexPath.row)
+            objectsAry.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
