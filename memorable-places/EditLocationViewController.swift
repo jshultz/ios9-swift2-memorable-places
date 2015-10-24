@@ -18,6 +18,11 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
     
     var allPapers = [NSManagedObject]()
     
+    var place: Places? = nil
+    
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+
+    
     
     override func viewWillAppear(animated: Bool) {
         
@@ -27,39 +32,8 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
     
     //-- fetch data from CoreData --//
     func fetchPapers () {
-        
-        //-- CoreData starts --//
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedObjectContext = appDelegate.managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "Places")
-        
-        var error: NSError?
-        
-        do {
-            allPapers = try managedObjectContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            
-            for paper in allPapers {
-                
-                let place_id = paper.valueForKey("id") as? Int
-                
-                print("activePlace ", activePlace)
-                print("place_id ", String(place_id!))
-                
-                if String(place_id!) == String(activePlace) {
-                    titleField.text = paper.valueForKey("title") as? String
-                    descriptionField.text = paper.valueForKey("user_description") as? String
-                }
-                
-                
-            }
-            
-        } catch {
-            print("Not fetched\(error)")
-        }
-        
-        //-- CoreData ends --//
-        
+        titleField.text = place?.title
+        descriptionField.text = place?.user_description
     }
 
 
@@ -72,42 +46,11 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func submitChanges(sender: AnyObject) {
         
-        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let context: NSManagedObjectContext = appDel.managedObjectContext
-        
-        let request = NSFetchRequest(entityName: "Places")
-        
-        request.returnsObjectsAsFaults = false
-        
+        place?.title = titleField.text
+        place?.user_description = descriptionField.text
         do {
-            let results = try context.executeFetchRequest(request)
-            
-            if (results.count > 0) {
-                let title = titleField?.text
-                let user_description = descriptionField?.text
-                
-                for result in results as! [NSManagedObject] {
-                    
-                    let place_id = result.valueForKey("id") as? Int
-                    
-                    if String(place_id!) == String(activePlace) {
-                        result.setValue(String(titleField.text!), forKey: "title")
-                        result.setValue(String(descriptionField.text!), forKey: "user_description")
-                    }
-                    
-                    
-                }
-                
-                do {
-                    print("here in the save")
-                    try context.save() 
-                } catch {
-                    print("something went wroing")
-                }
-                
-            }
-        } catch {
-            print("something went wrong")
+            try managedObjectContext.save()
+        } catch _ {
         }
     }
     

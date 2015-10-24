@@ -90,34 +90,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func viewWillAppear(animated: Bool) {
         
-//        objectsAry.removeAll()
-//        
-//        request.returnsObjectsAsFaults = false
-//        
-//        do {
-//            let results = try context.executeFetchRequest(request)
-//            
-//            if (results.count > 0) {
-//                
-//                for result in results as! [NSManagedObject] {
-////                    let thisID = result.objectID
-////                    let id:String = String(result.valueForKey("id")!)
-////                    let title:String = String(result.valueForKey("title")!)
-////                    let lat:String = String(result.valueForKey("lat")!)
-////                    let lon:String = String(result.valueForKey("lon")!)
-//                    objectsAry.append((result as? NSManagedObject)!)
-//                }
-//            }
-//        } catch {
-//            print("something went wrong")
-//        }
-        
-//        if places.count == 0 {
-//            places.append(["name":"Taj Mahal","lat":"27.175277","lon":"78.042128"])
-//            
-//        }
-        
-        
         tableView.reloadData()
     }
 
@@ -185,7 +157,12 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             print("in this spot")
             activePlace = -1
         } else {
-//            activePlace = indexPath[row]
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPathForCell(cell)
+            let locationController:LocationViewController = segue.destinationViewController as! LocationViewController
+            let location:Places = fetchedResultController.objectAtIndexPath(indexPath!) as! Places
+
+            locationController.place = location
         }
     }
 

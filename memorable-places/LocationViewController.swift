@@ -11,6 +11,8 @@ import CoreData
 
 class LocationViewController: UIViewController {
     
+    var place: Places? = nil
+    
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -21,8 +23,6 @@ class LocationViewController: UIViewController {
     
     @IBOutlet weak var stateLabel: UILabel!
     
-    var allPapers = [NSManagedObject]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,38 +32,13 @@ class LocationViewController: UIViewController {
     
     //-- fetch data from CoreData --//
     func fetchPapers () {
-        
-        //-- CoreData starts --//
-        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "Places")
-        
-        var error: NSError?
-        
-        do {
-            allPapers = try managedObjectContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            
-            for paper in allPapers {
-                
-                let place_id:Int = (paper.valueForKey("id") as? Int)!
-                
-                print("activePlace ", Int(activePlace))
-                print("place_id ", place_id)
-            
-                if place_id == Int(activePlace) {
-                    titleLabel.text = paper.valueForKey("title") as? String
-                    cityLabel.text = paper.valueForKey("locality") as? String
-                    descriptionLabel.text = paper.valueForKey("user_description") as? String
-                    stateLabel.text = paper.valueForKey("administrativeArea") as? String
-                    streetLabel.text = paper.valueForKey("street") as? String
-                }
-            }
-            
-        } catch {
-            print("Not fetched\(error)")
+        if place != nil {
+            titleLabel.text = place?.title
+            descriptionLabel.text = place?.user_description
+            streetLabel.text = place?.street
+            cityLabel.text = place?.locality
+            stateLabel.text = place?.administrativeArea
         }
-        
-        //-- CoreData ends --//
         
     }
     
@@ -77,14 +52,25 @@ class LocationViewController: UIViewController {
     }
     
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "newPlace" {
+            print("in this spot")
+            activePlace = -1
+        } else {
+
+
+            let editLocationController:EditLocationViewController = segue.destinationViewController as! EditLocationViewController
+            let location:Places = place!
+            
+            editLocationController.place = location
+        }
     }
-    */
+
 
 }
