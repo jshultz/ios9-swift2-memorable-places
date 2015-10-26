@@ -156,10 +156,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         if segue.identifier == "newPlace" {
             print("in this spot")
             activePlace = -1
-        } else if segue.identifier == "mapView" {
-            
-            let mapController:MapViewController = segue.destinationViewController as! MapViewController
-//            mapController.place = place
         } else {
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPathForCell(cell)
