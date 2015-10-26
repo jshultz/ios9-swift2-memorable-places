@@ -27,11 +27,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     var fetchedResultController: NSFetchedResultsController = NSFetchedResultsController()
     
     func getFetchedResultController() -> NSFetchedResultsController {
-        fetchedResultController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultController = NSFetchedResultsController(fetchRequest: placeFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     return fetchedResultController
     }
     
-    func taskFetchRequest() -> NSFetchRequest {
+    func placeFetchRequest() -> NSFetchRequest {
         let fetchRequest = NSFetchRequest(entityName: "Places")
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -43,13 +43,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchedResultController = getFetchedResultController()
-        fetchedResultController.delegate = self
-        do {
-            try fetchedResultController.performFetch()
-        } catch {
-            print("something done gone wrong")
-        }
         
     }
 
@@ -76,6 +69,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PlacesTableViewCell
 
         let place = fetchedResultController.objectAtIndexPath(indexPath) as! Places
+        
         cell.locationNameLabel!.text = place.title
 
 
@@ -90,7 +84,14 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func viewWillAppear(animated: Bool) {
         
-        tableView.reloadData()
+        fetchedResultController = getFetchedResultController()
+        fetchedResultController.delegate = self
+        do {
+            try fetchedResultController.performFetch()
+            self.tableView.reloadData()
+        } catch {
+            print("something done gone wrong")
+        }
     }
 
     /*
@@ -105,25 +106,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            
-            do {
-//                let results = try context.executeFetchRequest(request)
-//                
-//                let placeToDelete = results[indexPath.row]
-//                
-//                // Delete it from the managedObjectContext
-//                context.deleteObject(placeToDelete as! NSManagedObject)
-//                
-//                do {
-//                    try context.save()
-//                } catch {
-//                    print("something went wrong?")
-//                }
-                
-            
-            } catch {
-                print("something went wrong")
-            }
             // Delete the row from the data source
             objectsAry.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
