@@ -50,6 +50,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate {
         place?.user_description = descriptionField.text
         do {
             try managedObjectContext.save()
+            navigationController?.popViewControllerAnimated(true)
         } catch _ {
         }
     }

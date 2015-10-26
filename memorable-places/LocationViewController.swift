@@ -59,16 +59,12 @@ class LocationViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if segue.identifier == "newPlace" {
-            print("in this spot")
-            activePlace = -1
-        } else {
-
-
-            let editLocationController:EditLocationViewController = segue.destinationViewController as! EditLocationViewController
-            let location:Places = place!
-            
-            editLocationController.place = location
+        if segue.identifier == "mapSegue" {
+            let mapController:MapViewController = segue.destinationViewController as! MapViewController
+            mapController.place = place
+        } else if segue.identifier == "editPlace" {
+            let editController:EditLocationViewController = segue.destinationViewController as! EditLocationViewController
+            editController.place = place
         }
     }
 

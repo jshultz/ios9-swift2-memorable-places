@@ -13,8 +13,9 @@ import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
-    @IBOutlet weak var map: MKMapView!
+    var place: Places? = nil
     
+    @IBOutlet weak var map: MKMapView!
     
     @IBAction func refreshLocation(sender: AnyObject) {
         locationManager.startUpdatingLocation()
@@ -22,6 +23,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
+            print("place", place)
         // Do any additional setup after loading the view, typically from a nib.
         
         locationManager.delegate = self
@@ -31,8 +33,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if activePlace == -1 {
             
         } else {
-            let latitude = NSString(string: places[activePlace]["lat"]!).doubleValue
-            let longitude = NSString(string: places[activePlace]["lon"]!).doubleValue
+            let latitude = NSString(string: (place?.lat)!).doubleValue
+            let longitude = NSString(string: (place?.lon!)!).doubleValue
             let latDelta:CLLocationDegrees = 0.01 // must use type CLLocationDegrees
             let lonDelta:CLLocationDegrees = 0.01 // must use type CLLocationDegrees
             let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta) // Combination of two Delta Degrees
@@ -41,8 +43,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.map.setRegion(region, animated: false) // Take all that stuff and make a map!
             let annotation = MKPointAnnotation()
             annotation.coordinate = location
-            annotation.title = places[activePlace]["name"]
-            annotation.subtitle = "If you were here you would know it."
+            annotation.title = place?.title
+            annotation.subtitle = place?.user_description
             self.map.addAnnotation(annotation)
         }
         
@@ -93,17 +95,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func action(gestureRecognizer:UIGestureRecognizer){
         
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             
             // Setup Connection
-            
-            let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            
-            let context: NSManagedObjectContext = appDel.managedObjectContext
-            
-            let request = NSFetchRequest(entityName: "Places")
-            
-            request.returnsObjectsAsFaults = false
             
             // Bleh
             
@@ -196,33 +192,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
                 self.map.addAnnotation(annotation)
                 
-                places.append(["name":title,"lat":"\(newCoordinate.latitude)","lon":"\(newCoordinate.longitude)"])
-                
                 do {
-                    let results = try context.executeFetchRequest(request) // did we get something?
+                    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
                     
-                    let count:Int = results.count == 0 ? results.count : results.count + 1
+                    let entityDescripition = NSEntityDescription.entityForName("Places", inManagedObjectContext: managedObjectContext)
+                    let place = Places(entity: entityDescripition!, insertIntoManagedObjectContext: managedObjectContext)
                     
-                    let newPlace = NSEntityDescription.insertNewObjectForEntityForName("Places", inManagedObjectContext: context)
-                    
-                    newPlace.setValue(Int(count), forKey: "id")
-                    newPlace.setValue(String(title), forKey: "title")
-                    newPlace.setValue(String(street), forKey: "street")
-                    newPlace.setValue(String(locality), forKey: "locality")
-                    newPlace.setValue(String(region), forKey: "region")
-                    newPlace.setValue(String(country), forKey: "country")
-                    newPlace.setValue(String(newCoordinate.latitude), forKey: "lat")
-                    newPlace.setValue(String(newCoordinate.longitude), forKey: "lon")
-                    newPlace.setValue(String(administrativeArea), forKey: "administrativeArea")
+                    place.setValue(String(title), forKey: "title")
+                    place.setValue(String(street), forKey: "street")
+                    place.setValue(String(locality), forKey: "locality")
+                    place.setValue(String(region), forKey: "region")
+                    place.setValue(String(country), forKey: "country")
+                    place.setValue(String(newCoordinate.latitude), forKey: "lat")
+                    place.setValue(String(newCoordinate.longitude), forKey: "lon")
+                    place.setValue(String(administrativeArea), forKey: "administrativeArea")
                     
                     do {
-                        try context.save()
+                        print("place", place)
+                        try managedObjectContext.save()
                     } catch {
                         print("something went wrong")
                     }
 
-                } catch {
-                    print("something went wrong")
                 }
                 
             })

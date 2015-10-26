@@ -98,7 +98,7 @@
                                 </constraints>
                                 <state key="normal" title="View on Map"/>
                                 <connections>
-                                    <segue destination="Gld-0O-k6e" kind="show" id="LXi-GL-2xT"/>
+                                    <segue destination="Gld-0O-k6e" kind="show" identifier="mapSegue" id="LXi-GL-2xT"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EaR-xw-nmO">
