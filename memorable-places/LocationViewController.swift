@@ -31,7 +31,7 @@ class LocationViewController: UIViewController {
     }
     
     //-- fetch data from CoreData --//
-    func fetchPapers () {
+    func fetchLocation () {
         if place != nil {
             titleLabel.text = place?.title
             descriptionLabel.text = place?.user_description
@@ -43,7 +43,7 @@ class LocationViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        fetchPapers()
+        fetchLocation()
     }
 
     override func didReceiveMemoryWarning() {

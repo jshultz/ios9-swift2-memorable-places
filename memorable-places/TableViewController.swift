@@ -18,7 +18,7 @@ var activePlace = -1
 //
 //let request = NSFetchRequest(entityName: "Places")
 
-var objectsAry = [NSManagedObject]()
+//var objectsAry = [NSManagedObject]()
 
 
 class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
@@ -67,18 +67,13 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PlacesTableViewCell
-
         let place = fetchedResultController.objectAtIndexPath(indexPath) as! Places
-        
         cell.locationNameLabel!.text = place.title
-
-
         return cell
     }
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         activePlace = indexPath.row
-        
         return indexPath
     }
     
@@ -104,14 +99,21 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
 
 
     // Override to support editing the table view.
+    // MARK: - TableView Deleteƒ
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            objectsAry.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        let managedObject:NSManagedObject = fetchedResultController.objectAtIndexPath(indexPath) as! NSManagedObject
+        managedObjectContext.deleteObject(managedObject)
+        do {
+            try managedObjectContext.save()
+        } catch _ {
+        }
+    }
+    
+    // MARK: - TableView Refresh
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.reloadData()
     }
 
 
